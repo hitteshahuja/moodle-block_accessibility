@@ -37,8 +37,6 @@ class block_accessibility extends block_base {
  	CONST FONTSIZE_URL = '/blocks/accessibility/changesize.php';
 	CONST COLOUR_URL = '/blocks/accessibility/changecolour.php';
 	CONST DB_URL = '/blocks/accessibility/database.php';
-	//CONST LOADER_ICON = '/blocks/accessibility/pix/loader.gif'; // not in use anymore
-
 	/**
 	 * Set the title and include the stylesheet
 	 *
@@ -99,6 +97,7 @@ class block_accessibility extends block_base {
 		global $USER;
 		global $FULLME;
 		global $DB;
+		global $PAGE;
 
 
 		// Until Issue #63 is fixed, we don't want to display block for unauthenticated users
@@ -129,28 +128,46 @@ class block_accessibility extends block_base {
 		// INITIALIZE BUTTON ATTRIBUTES
 		// ===============================================
 		// initialization of increase_font, decrease_font and save button
-		$inc_attrs = array(
-			'title' => get_string('inctext', 'block_accessibility'),
-			'id' => "block_accessibility_inc",
-			'href' => $size_url->out(false, array('op' => 'inc'))
-		);
-		$dec_attrs = array(
-			'title' => get_string('dectext', 'block_accessibility'),
-			'id' => "block_accessibility_dec",
-			'href' => $size_url->out(false, array('op' => 'dec'))
-		);
+		$button_attributes = array('inc','dec','reset');
+		foreach($button_attributes as $attr_type ){
+			$var_name = $attr_type.'_attrs';
+			$btns[$var_name] = array(
+				'title' => get_string($attr_type."text", 'block_accessibility'),
+				'id' => "block_accessibility_{$attr_type}",
+				'href'=> $size_url->out(),
+				'class' => 'btn btn-default'
+			);
+
+
+		}
+		extract	($btns);
+//		$inc_attrs = array(
+//			'title' => get_string('inctext', 'block_accessibility'),
+//			'id' => "block_accessibility_inc",
+//			'href' => $size_url->out(false, array('op' => 'inc')),
+//			'class'=> "btn btn-medium btn-block btn-success"
+//
+//		);
+//		$dec_attrs = array(
+//			'title' => get_string('dectext', 'block_accessibility'),
+//			'id' => "block_accessibility_dec",
+//			'href' => $size_url->out(false, array('op' => 'dec')),
+//			'class'=> "btn btn-medium btn-block btn-warning"
+//		);
 		$save_attrs = array(
 			'title' => get_string('save', 'block_accessibility'),
 			'id' => "block_accessibility_save",
-			'href' => $db_url->out(false)
+			'href' => $db_url->out(false),
+			'class'=> "btn btn-medium btn-block"
 		);
 
 		// initialization of reset button
-		$reset_attrs = array(
-			'id' => 'block_accessibility_reset',
-			'title' => get_string('resettext', 'block_accessibility'),
-			'href' => $size_url->out(false, array('op' => 'reset'))
-		);
+//		$reset_attrs = array(
+//			'id' => 'block_accessibility_reset',
+//			'title' => get_string('resettext', 'block_accessibility'),
+//			'href' => $size_url->out(false, array('op' => 'reset')),
+//			'class'=> "btn btn-medium btn-block"
+//		);
 
 
 		// if any of increase/decrease buttons reached maximum size, disable it
@@ -195,7 +212,8 @@ class block_accessibility extends block_base {
 		);
 		$c4_attrs = array(
 			'id' => 'block_accessibility_colour4',
-			'href' => $colour_url->out(false, array('scheme' => 4))
+			'href' => $colour_url->out(false, array('scheme' => 4)),
+			'class' => 'btn btn-inverse'
 		);
 		if (!isset($USER->colourscheme)) {
 			$c1_attrs['class'] = 'disabled';
@@ -213,27 +231,30 @@ class block_accessibility extends block_base {
 		$content = '';
 
 		$strchar = get_string('char', 'block_accessibility');
-		$resetchar = "R";
+		$resetchar = get_string('resetchar', 'block_accessibility');
 		$divattrs = array('id' => 'accessibility_controls', 'class' => 'content');
 		$listattrs = array('id' => 'block_accessibility_textresize', 'class' => 'button_row');
 
 		$content .= html_writer::start_tag('div', $divattrs);
 		$content .= html_writer::start_tag('ul', $listattrs);
-
+		//Decrease Button
 		$content .= html_writer::start_tag('li', array('class' => 'access-button'));
 		$content .= html_writer::tag('a', $strchar.'-', $dec_attrs);
 		$content .= html_writer::end_tag('li');
-
+		//Reset Button
 		$content .= html_writer::start_tag('li', array('class' => 'access-button'));
 		$content .= html_writer::tag('a', $strchar, $reset_attrs);
 		$content .= html_writer::end_tag('li');
-
+		//Increase Button
 		$content .= html_writer::start_tag('li', array('class' => 'access-button'));
 		$content .= html_writer::tag('a', $strchar.'+', $inc_attrs);
 		$content .= html_writer::end_tag('li');
-
+		//Save Button
 		$content .= html_writer::start_tag('li', array('class' => 'access-button'));
-		$content .= html_writer::tag('a', '&nbsp', $save_attrs);
+		$content .= html_writer::start_tag('a', $save_attrs);
+		$content .= html_writer::start_tag('i',array('class'=>'fa fa-download'));
+		$content .= html_writer::end_tag('i');
+		$content .= html_writer::end_tag('a');
 		$content .= html_writer::end_tag('li');
 
 		$content .= html_writer::end_tag('ul');
@@ -345,7 +366,7 @@ class block_accessibility extends block_base {
 
 		// SET THE BLOCK CONTENT
 		// ===============================================
-		$this->content = new stdClass;
+		$this->content = new \stdClass();
 		$this->content->footer = '';
 		$this->content->text = $content;
 
@@ -367,14 +388,19 @@ class block_accessibility extends block_base {
 			$this->page->requires->string_for_js('jsnotloggedin', 'block_accessibility');
 			$this->page->requires->string_for_js('launchtoolbar', 'block_accessibility');
 
-			$jsmodule = array(
-				'name'  =>  'block_accessibility',
-				'fullpath'  =>  self::JS_URL,
-				'requires'  =>  array('base', 'node', 'stylesheet')
-			);
+//			$jsmodule = array(
+//				'name'  =>  'block_accessibility',
+//				'fullpath'  =>  self::JS_URL,
+//				'requires'  =>  array('base', 'node', 'stylesheet')
+//			);
+//
+//			// include js script and pass the arguments
+//			$this->page->requires->js_init_call('M.block_accessibility.init', $jsdata, false, $jsmodule);
 
-			// include js script and pass the arguments
-			$this->page->requires->js_init_call('M.block_accessibility.init', $jsdata, false, $jsmodule);
+			//AMD JS
+
+			$PAGE->requires->js_call_amd('block_accessibility/accessibility', 'init', [$jsdata]);
+
 		}
 		
 

@@ -49,6 +49,7 @@ define('MAX_FONTSIZE', 197); // in %
 define('MIN_FONTSIZE', 77); // in %
 define('MAX_PX_FONTSIZE', 26); // in px
 define('MIN_PX_FONTSIZE', 10); // in px
+define('BASE_PIXEL_SIZE',13); // base pixel size in px
 
 define('DEFAULT_SHOWATBAR', TRUE);
 define('DEFAULT_AUTOSAVE', FALSE);
@@ -85,7 +86,20 @@ function accessibility_getsize($size) {
         throw new moodle_exception('invalidsize', 'block_accessibility');
     }
 }
-
+function accessibility_getsize2($size){
+    // http://yuilibrary.com/yui/docs/cssfonts/
+    $sizes = array();
+    for($i=MIN_PX_FONTSIZE;$i<=MAX_PX_FONTSIZE;$i++){
+        $sizes[$i] = ceil($i/BASE_PIXEL_SIZE * 100) ;
+    }
+    if (is_int($size) && array_key_exists($size, $sizes)) { // If we're looking at a key (px)
+        return $sizes[$size]; // Return the value (%)
+    } else if (in_array($size, $sizes)) { // If we're looking at a value (%)
+        return array_search($size, $sizes); // Return the key (px)
+    } else {
+        throw new moodle_exception('invalidsize', 'block_accessibility');
+    }
+}
 /**
  * Find out whether we're desponding to an AJAX call by seeing if the HTTP_X_REQUESTED_WITH header
  * is XMLHttpRequest
