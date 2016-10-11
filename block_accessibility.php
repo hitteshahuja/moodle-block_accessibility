@@ -399,7 +399,7 @@ class block_accessibility extends block_base {
 
 			//AMD JS
 
-			$PAGE->requires->js_call_amd('block_accessibility/accessibility', 'init', [$jsdata]);
+			$PAGE->requires->js_call_amd('block_accessibility/accessibility', 'init', $jsdata);
 
 		}
 		
