@@ -12,7 +12,9 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
                     successfn(result, success, xhr);
                 },
 
-                failure: failure
+                failure: function(xhr,textStatus){
+                    failure(xhr,textStatus);
+                }
             });
         },
         /**
