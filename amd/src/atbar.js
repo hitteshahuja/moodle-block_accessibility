@@ -1,48 +1,31 @@
-define(['jquery'],function($){
+define(['jquery','core/str','core/config','block_accessibility/util'],function($,m_string,config,block_util){
     var ATBAR_SRC =  'https://core.atbar.org/atbar/en/latest/atbar.min.js';
     var watch =  null;
     return{
         load_atbar : function(){
-        var jf = $("<script id= 'ToolBar' type='text/javascript' href='"+ATBAR_SRC+"'></script>");
-        $('head').append(jf);
+            var jf = document.createElement('script');
+            jf.src = ATBAR_SRC;
+            jf.type = 'text/javascript';
+            jf.id = 'ToolBar';
+            document.getElementsByTagName('head')[0].appendChild(jf);
         },
         atbar_autoload: function(op) {
+            var location =config.wwwroot+'/blocks/accessibility/database.php';
+            var successFn = function(result, success,xhr){
+                console.log("firin success!");
+                console.log(m_string);
+                block_util.show_message(m_string.get_string('saved', 'block_accessibility'));
+            };
+            var failureFn = function(xhr,textStatus){
+                if (textStatus != '404') {
+                    alert(m_string.get_string('jsnosave', 'block_accessibility')+': '+xhr.status+' '+xhr.statusText);
+                }
+            };
             if (op == 'on') {
-                this.Y.io(M.cfg.wwwroot+'/blocks/accessibility/database.php', {
-                    data: 'op=save&atbar=true',
-                    method: 'get',
-                    on: {
-                        success: function(id, o) {
-                            M.block_accessibility.show_message(M.util.get_string('saved', 'block_accessibility'));
-                            //setTimeout("M.block_accessibility.show_message('')", 5000);
-                        },
-                        failure: function(id, o) {
-                            if (o.status != '404') {
-                                alert(M.util.get_string('jsnosave', 'block_accessibility')+': '+o.status+' '+o.statusText);
-                            }
-                        },
-                        start: M.block_accessibility.show_loading,
-                        end: M.block_accessibility.hide_loading
-                    }
-                });
+                block_util.sendRequest(location,{'op':'save','atbar':true},successFn,failureFn);
             } else if (op == 'off') {
-                this.Y.io(M.cfg.wwwroot+'/blocks/accessibility/database.php', {
-                    data: 'op=reset&atbar=true',
-                    method: 'get',
-                    on: {
-                        success: function(id, o) {
-                            M.block_accessibility.show_message(M.util.get_string('reset', 'block_accessibility'));
-                            //setTimeout("M.block_accessibility.show_message('')", 5000);
-                        },
-                        failure: function(id, o) {
-                            if (o.status != '404') {
-                                alert(M.util.get_string('jsnoreset', 'block_accessibility')+': '+o.status+' '+o.statusText);
-                            }
-                        },
-                        start: M.block_accessibility.show_loading,
-                        end: M.block_accessibility.hide_loading
-                    }
-                });
+
+                block_util.sendRequest(location,{'op':'reset','atbar':true},successFn,failureFn);
             }
         },
         watch_atbar_for_close: function() {
