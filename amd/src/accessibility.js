@@ -116,8 +116,8 @@
             // ATBar might be disabled in block's config
             if($('#atbar_auto') !== null){
                 // checkbox for setting 'always' chackbox
-                $('#atbar_auto').on('click', function(e) {
-                    if ($(this).checked) {
+                $('#atbar_auto').on('click', function() {
+                    if ($(this).is(':checked')) {
                         atbar.atbar_autoload('on');
                     } else {
                         atbar.atbar_autoload('off');
@@ -127,7 +127,6 @@
                 // Create Bookmarklet-style link using code from ATbar site
                 // http://access.ecs.soton.ac.uk/StudyBar/versions
                 $('#block_accessibility_launchtoolbar').on('click', function() {
-                    console.log("I was clicked!");
                     atbar.load_atbar();
 
                     // Do we really need it?
@@ -154,10 +153,6 @@
         },
         setInstanceID: function(id){
            instance_id = id;
-        },
-        getInstanceID:function(){
-            return instance_id;
         }
-
     };
 });
