@@ -45,10 +45,9 @@ if (!accessibility_is_ajax()) {
     $redirect = required_param('redirect', PARAM_TEXT);
     $redirecturl = new moodle_url($redirect);
 }
-
+global $USER,$DB;
 switch ($op) {
     case 'save':
-
         if ($setting = $DB->get_record('block_accessibility', array('userid' => $USER->id))) {
             // Check if the user's already got a saved setting. If they have, just update it.
             if ($size && isset($USER->fontsize)) {
