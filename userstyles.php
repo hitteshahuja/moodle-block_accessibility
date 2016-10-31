@@ -45,6 +45,7 @@ if (!isloggedin()) die();
    https://moodle.org/mod/forum/discuss.php?d=129799
    Also check configdata encoding in C:\...\blocks\moodleblock.class.php
 */
+global $DB;$USER;
 $instance_id = required_param('instance_id', PARAM_INT);
 $data = $DB->get_record('block_instances', array('id' => $instance_id), '*', MUST_EXIST); 
 $block_instance = block_instance('accessibility', $data); // test it in all languages?
