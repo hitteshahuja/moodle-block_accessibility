@@ -35,6 +35,7 @@ header('Cache-Control: no-cache');
 // INITIALIZATION
 // =========================================================
 require_once('../../config.php');
+global $CFG,$USER;
 require_once($CFG->dirroot.'/blocks/accessibility/lib.php');
 require_login();
 
