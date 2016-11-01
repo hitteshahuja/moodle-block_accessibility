@@ -12,15 +12,15 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
          * @param {String} op the operation we're doing, either 'on' or 'off'.
          *
          */
-        toggle:function(id,op){
-            var button = $('#block_accessibility_'+id);
+        toggle: function (id, op) {
+            var button = $('#block_accessibility_' + id);
             if (op == 'on') {
                 if (button.hasClass('disabled')) {
                     //this.log('Enabling '+button);
                     button.removeClass('disabled');
                 }
             } else if (op == 'off') {
-                if(!button.hasClass('disabled')) {
+                if (!button.hasClass('disabled')) {
                     //this.log('Disabling '+button);
                     button.addClass('disabled');
                 }
@@ -38,8 +38,8 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
                     successfn(result, success, xhr);
                 },
 
-                failure: function(xhr,textStatus){
-                    failure(xhr,textStatus);
+                failure: function (xhr, textStatus) {
+                    failure(xhr, textStatus);
                 }
             });
         },
@@ -68,16 +68,16 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
                 $('#accessibility_controls').css('opacity', '1');
             }
         },
-        reload_stylesheet: function(id){
+        reload_stylesheet: function (id) {
             console.log("reloading stylesheet in util...");
 
             var cache_prevention_salt = new Date().getTime();
             var oldStylesheet = this.sheetnode;
             console.log(oldStylesheet);
-            var cssURL = config.wwwroot+
-                '/blocks/accessibility/userstyles.php?instance_id='+
-                id+
-                '&v='+cache_prevention_salt;
+            var cssURL = config.wwwroot +
+                '/blocks/accessibility/userstyles.php?instance_id=' +
+                id +
+                '&v=' + cache_prevention_salt;
             if (document.createStyleSheet) // only for IE < 11 and IE > 8
             {
                 console.log("Reloading stylesheet");
@@ -94,20 +94,19 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
                  // also keep in mind that createStyleSheet can create up to 31 stylesheets
                  // http://msdn.microsoft.com/en-us/library/ie/ms531194(v=vs.85).aspx
                  */
-                oldStylesheet.attr('href',cssURL);
+                oldStylesheet.attr('href', cssURL);
             }
-            else{
+            else {
                 console.log("creating new stylesheet and deleting old one makes more smooth transition");
                 // IE 11 and non-IE browsers:
                 // creating new stylesheet and deleting old one makes more smooth transition
                 // Why wouldn't we just set the href attribute insted of creating another stylesheet node? Because before the new stylesheet is loaded and while old one is deleted, the page will lose all the styles and all the elements get unstyled for a some time (poor user experience)
                 newStylesheet = oldStylesheet.clone(true);
                 newStylesheet.attr('href', cssURL);
-                console.log(newStylesheet);
                 $('head').append(newStylesheet);
                 console.log("appending new ss..");
                 // remove old stylesheet
-               newStylesheet.load(function(){
+                newStylesheet.load(function () {
                     console.log("removing old ss..");
                     oldStylesheet.remove();
                 });
