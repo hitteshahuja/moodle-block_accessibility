@@ -1,5 +1,7 @@
 define(['jquery', 'core/str', 'core/config', 'block_accessibility/util'], function ($, m_string, config, block_util) {
     var ATBAR_SRC = 'https://core.atbar.org/atbar/en/latest/atbar.min.js';
+    //Local copy
+    var ATBAR_SRC_LOCAL = config.wwwroot + '/blocks/accessiblity/atbar.min.js';
     var watch = null;
     return {
         load_atbar: function () {
