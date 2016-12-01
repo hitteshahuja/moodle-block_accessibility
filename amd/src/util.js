@@ -1,4 +1,4 @@
-define(['jquery', 'block_accessibility/accessibility', 'core/config'], function ($, accessibility, config) {
+define(['jquery', 'block_accessibility/accessibility', 'core/config', 'core/str'], function ($, accessibility, config, string) {
     var newStylesheet = null;
     var sheetnode = null;
     return {
@@ -50,8 +50,8 @@ define(['jquery', 'block_accessibility/accessibility', 'core/config'], function 
          */
         show_message: function (msg) {
             console.log(msg);
-            var msg = "Setting Saved!";
-            $('#block_accessibility_message').css('display', 'block').html(msg).fadeOut('slow');
+            var msg = '<span class="label label-success">' + msg + '</span>';
+            $('#block_accessibility_message').css('display', 'block').html(msg).hide('fadeSlow');
 
         },
         show_loading: function () {
