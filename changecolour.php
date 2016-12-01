@@ -35,13 +35,13 @@
 // INITIALIZATION
 // =========================================================
 require_once('../../config.php');
-require_once($CFG->dirroot.'/blocks/accessibility/lib.php');
+require_once($CFG->dirroot . '/blocks/accessibility/lib.php');
 require_login();
 
 $scheme = required_param('scheme', PARAM_INT);
 
-switch($scheme) {
-    case 1: 
+switch ($scheme) {
+    case 1:
         // Clear the scheme stored in the session
         unset($USER->colourscheme);
 
@@ -51,9 +51,9 @@ switch($scheme) {
             'scheme' => true,
             'userid' => $USER->id
         );
-        if(!accessibility_is_ajax()){
+        if (!accessibility_is_ajax()) {
             $redirect = required_param('redirect', PARAM_TEXT);
-            $urlparams['redirect'] = $redirect; 
+            $urlparams['redirect'] = $redirect;
         }
         $redirecturl = new moodle_url('/blocks/accessibility/database.php', $urlparams);
         redirect($redirecturl);
