@@ -41,6 +41,7 @@ $string['pluginname'] = 'Accessibility';
 $string['pluginnameplural'] = 'Accessibility Blocks';
 $string['resettext'] = 'Reset Text Size (Clears Saved Setting)';
 $string['reset'] = 'Setting Cleared';
+$string['resetchar'] = 'R';
 $string['save'] = 'Save Setting';
 $string['saved'] = 'Setting Saved';
 $string['col1text'] = 'Deafult Colour Scheme (Clears Saved Setting)';
