@@ -14,7 +14,6 @@ define(['jquery', 'core/str', 'core/config', 'block_accessibility/util'], functi
         atbar_autoload: function (op) {
             var location = config.wwwroot + '/blocks/accessibility/database.php';
             var successFn = function (result, success, xhr) {
-                console.log("firin success!");
                 block_util.show_message(m_string.get_string('saved', 'block_accessibility'));
             };
             var failureFn = function (xhr, textStatus) {
